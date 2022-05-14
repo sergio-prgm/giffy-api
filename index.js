@@ -6,6 +6,7 @@ const registerRouter = require('./controllers/register')
 
 const express = require('express')
 const cors = require('cors')
+const handleErrors = require('./middleware/handleErrors')
 
 const app = express()
 
@@ -23,6 +24,7 @@ app.use('/login', loginRouter)
 app.use('/register', registerRouter)
 
 // (post)Middlewares
+app.use(handleErrors)
 
 const PORT = process.env.PORT
 
