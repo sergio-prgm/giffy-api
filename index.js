@@ -1,6 +1,9 @@
 require('dotenv').config()
 require('./mongo')
 
+const loginRouter = require('./controllers/login')
+const registerRouter = require('./controllers/register')
+
 const express = require('express')
 const cors = require('cors')
 
@@ -16,8 +19,8 @@ app.get('/', (request, response) => {
 
 // Controllers
 // app.use('/favs', favsRouter)
-// app.use('/login', loginRouter)
-// app.use('/register', registerRouter)
+app.use('/login', loginRouter)
+app.use('/register', registerRouter)
 
 // (post)Middlewares
 
