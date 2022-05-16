@@ -1,14 +1,16 @@
 require('dotenv').config()
 require('./mongo')
 
+const express = require('express')
+const cors = require('cors')
+const app = express()
+
+const favsRouter = require('./controllers/favs')
 const loginRouter = require('./controllers/login')
 const registerRouter = require('./controllers/register')
 
-const express = require('express')
-const cors = require('cors')
 const handleErrors = require('./middleware/handleErrors')
-
-const app = express()
+const notFound = require('./middleware/notFound')
 
 // (pre)Middlewares
 app.use(cors())
@@ -19,12 +21,13 @@ app.get('/', (request, response) => {
 })
 
 // Controllers
-// app.use('/favs', favsRouter)
-app.use('/login', loginRouter)
-app.use('/register', registerRouter)
+app.use('/api/favs', favsRouter)
+app.use('/api/login', loginRouter)
+app.use('/api/register', registerRouter)
 
 // (post)Middlewares
 app.use(handleErrors)
+app.use(notFound)
 
 const PORT = process.env.PORT
 

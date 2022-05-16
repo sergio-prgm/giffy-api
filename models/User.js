@@ -7,7 +7,14 @@ const userSchema = new Schema({
   //   type: String,
   //   unique: true
   // },
-  passwordHash: String 
+  passwordHash: String,
+  favorites: [{
+    type: String
+  }]
+  // favs: [{
+  //   type: Schema.Types.ObjectId,
+  //   ref: 'Fav'
+  // }]
 })
 
 userSchema.set('toJSON', {
