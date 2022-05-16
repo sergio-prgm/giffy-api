@@ -8,7 +8,7 @@ favsRouter.get('/', async (request, response) => {
   response.send('<h2>Esto son los favs</h2>')
 })
 
-// Add note to favorites
+// ✅ Add note to favorites
 favsRouter.post('/', userExtractor, async (request, response) => {
   const { id } = request.body
   const { userId } = request
@@ -32,10 +32,26 @@ favsRouter.post('/', userExtractor, async (request, response) => {
 })
 
 // Delete note from favs
-favsRouter.delete('/:id', async (request, response) => {
-  // find user and remove gif id from favs array
-  // Might need to use put instead of delete
+favsRouter.delete('/', userExtractor, async (request, response) => {
+  const { id } = request.body
+  const { userId } = request
 
+  if (!id) {
+    return response.status(400).json({
+      error: 'gif id missing'
+    })
+  }
+
+  try {
+    const updatedUser = await User.findByIdAndUpdate(
+      { _id: userId },
+      { $pull: { favorites: id } },
+      { new: true }
+    )
+    console.log(updatedUser)
+  } catch (error) {
+    console.log(error)
+  }
 })
 
 module.exports = favsRouter
