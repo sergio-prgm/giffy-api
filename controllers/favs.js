@@ -11,10 +11,11 @@ favsRouter.get('/', userExtractor, async (request, response) => {
 })
 
 // ✅ Add note to favorites
-favsRouter.post('/', userExtractor, async (request, response) => {
-  const { id } = request.body
+favsRouter.post('/:id', userExtractor, async (request, response) => {
+  const { id } = request.params
   const { userId } = request
 
+  // Add id format verification
   if (!id) {
     return response.status(400).json({
       error: 'gif id missing'
@@ -24,18 +25,19 @@ favsRouter.post('/', userExtractor, async (request, response) => {
   try {
     const updatedUser = await User.findByIdAndUpdate(
       { _id: userId },
-      { $push: { favorites: id } },
+      { $addToSet: { favorites: id } },
       { new: true }
     )
     console.log(updatedUser)
+    response.json(updatedUser.favorites)
   } catch (error) {
     console.log(error)
   }
 })
 
 // ✅ Delete note from favs
-favsRouter.delete('/', userExtractor, async (request, response) => {
-  const { id } = request.body
+favsRouter.delete('/:id', userExtractor, async (request, response) => {
+  const { id } = request.params
   const { userId } = request
 
   if (!id) {
@@ -51,9 +53,13 @@ favsRouter.delete('/', userExtractor, async (request, response) => {
       { new: true }
     )
     console.log(updatedUser)
+    response.json(updatedUser.favorites)
   } catch (error) {
     console.log(error)
   }
 })
 
 module.exports = favsRouter
+
+// Before post or delete, see if the id is already in use.
+// It doesn't affect the response currently
