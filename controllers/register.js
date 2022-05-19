@@ -7,16 +7,17 @@ const bcrypt = require('bcrypt')
 // })
 
 registerRouter.post('/', async (request, response) => {
+  const { body } = request
+  const { username, password } = body
+
+  const passwordHash = await bcrypt.hash(password, 10)
+  const user = new User({
+    username,
+    passwordHash
+  })
+
+  console.log(user)
   try {
-    const { body } = request
-    const { username, password } = body
-
-    const passwordHash = await bcrypt.hash(password, 10)
-    const user = new User({
-      username,
-      passwordHash
-    })
-
     const savedUser = await user.save()
     response.status(201).json(savedUser)
   } catch (error) {

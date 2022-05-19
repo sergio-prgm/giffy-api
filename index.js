@@ -29,7 +29,7 @@ app.use('/api/register', registerRouter)
 app.use(handleErrors)
 app.use(notFound)
 
-const PORT = process.env.PORT
+const PORT = process.env.PORT || 3000
 
 // const server =
 app.listen(PORT, () => {
